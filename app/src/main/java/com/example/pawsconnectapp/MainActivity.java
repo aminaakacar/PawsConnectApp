@@ -1,5 +1,6 @@
 package com.example.pawsconnectapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity {
             JsonArrayRequest request = new JsonArrayRequest(messagesUrl, messagesResponseListener, errorListener);
             requestQueue.add(request);
         }
+    }
+
+    // Navigate to AddPetActivity
+    public void addPetActivity(View view) {
+        Intent intent = new Intent(this, AddPetActivity.class);
+        startActivity(intent);
     }
 
     // Listener for Pets API response
