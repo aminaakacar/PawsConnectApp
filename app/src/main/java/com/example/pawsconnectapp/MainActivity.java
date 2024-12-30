@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -19,6 +20,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,7 +49,18 @@ public class MainActivity extends AppCompatActivity {
     // Show available pets
     public void showPets(View view) {
         if (view != null) {
-            JsonArrayRequest request = new JsonArrayRequest(petsUrl, petsResponseListener, errorListener);
+            JsonArrayRequest request = new JsonArrayRequest(petsUrl, petsResponseListener, errorListener)
+            {
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError
+                {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("ApiKey", "SecretKey");
+                    return params;
+                }
+            };
+
+
             requestQueue.add(request);
         }
     }
@@ -54,7 +68,16 @@ public class MainActivity extends AppCompatActivity {
     // Show favorite animals
     public void showFavorites(View view) {
         if (view != null) {
-            JsonArrayRequest request = new JsonArrayRequest(favoritesUrl, favoritesResponseListener, errorListener);
+            JsonArrayRequest request = new JsonArrayRequest(favoritesUrl, favoritesResponseListener, errorListener)
+            {
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError
+                {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("ApiKey", "SecretKey");
+                    return params;
+                }
+            };
             requestQueue.add(request);
         }
     }
@@ -62,7 +85,16 @@ public class MainActivity extends AppCompatActivity {
     // Show adoption requests
     public void showAdoptionRequests(View view) {
         if (view != null) {
-            JsonArrayRequest request = new JsonArrayRequest(adoptionRequestsUrl, adoptionRequestsResponseListener, errorListener);
+            JsonArrayRequest request = new JsonArrayRequest(adoptionRequestsUrl, adoptionRequestsResponseListener, errorListener)
+            {
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError
+                {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("ApiKey", "SecretKey");
+                    return params;
+                }
+            };
             requestQueue.add(request);
         }
     }
@@ -70,7 +102,16 @@ public class MainActivity extends AppCompatActivity {
     // Show messages
     public void showMessages(View view) {
         if (view != null) {
-            JsonArrayRequest request = new JsonArrayRequest(messagesUrl, messagesResponseListener, errorListener);
+            JsonArrayRequest request = new JsonArrayRequest(messagesUrl, messagesResponseListener, errorListener)
+            {
+                @Override
+                public Map<String,String> getHeaders() throws AuthFailureError
+                {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("ApiKey", "SecretKey");
+                    return params;
+                }
+            };
             requestQueue.add(request);
         }
     }
