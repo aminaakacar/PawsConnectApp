@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize the RequestQueue and TextViews
         requestQueue = Volley.newRequestQueue(getApplicationContext());
         pets = findViewById(R.id.pets);
         favorites = findViewById(R.id.favorites);
@@ -41,50 +42,148 @@ public class MainActivity extends AppCompatActivity {
         messages = findViewById(R.id.messages);
     }
 
+    // Show available pets
     public void showPets(View view) {
-        fetchData(petsUrl, pets);
+        if (view != null) {
+            JsonArrayRequest request = new JsonArrayRequest(petsUrl, petsResponseListener, errorListener);
+            requestQueue.add(request);
+        }
     }
 
+    // Show favorite animals
     public void showFavorites(View view) {
-        fetchData(favoritesUrl, favorites);
+        if (view != null) {
+            JsonArrayRequest request = new JsonArrayRequest(favoritesUrl, favoritesResponseListener, errorListener);
+            requestQueue.add(request);
+        }
     }
 
+    // Show adoption requests
     public void showAdoptionRequests(View view) {
-        fetchData(adoptionRequestsUrl, adoptionRequests);
+        if (view != null) {
+            JsonArrayRequest request = new JsonArrayRequest(adoptionRequestsUrl, adoptionRequestsResponseListener, errorListener);
+            requestQueue.add(request);
+        }
     }
 
+    // Show messages
     public void showMessages(View view) {
-        fetchData(messagesUrl, messages);
+        if (view != null) {
+            JsonArrayRequest request = new JsonArrayRequest(messagesUrl, messagesResponseListener, errorListener);
+            requestQueue.add(request);
+        }
     }
 
-    private void fetchData(String url, TextView textView) {
-        JsonArrayRequest request = new JsonArrayRequest(url, new Response.Listener<JSONArray>() {
-            @Override
-            public void onResponse(JSONArray response) {
-                ArrayList<String> data = new ArrayList<>();
+    // Listener for Pets API response
+    private final Response.Listener<JSONArray> petsResponseListener = new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            ArrayList<String> data = new ArrayList<>();
+            for (int i = 0; i < response.length(); i++) {
                 try {
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject object = response.getJSONObject(i);
-                        data.add(object.toString());
-                    }
-                    textView.setText(""); // Clear the TextView
-                    for (String row : data) {
-                        String currentText = textView.getText().toString();
-                        textView.setText(currentText + "\n\n" + row);
-                    }
+                    JSONObject object = response.getJSONObject(i);
+                    String name = object.getString("name");
+                    String age = object.getString("age");
+
+                    data.add(name + " " + age);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    textView.setText("Error parsing data.");
+                    pets.setText("Error parsing data.");
+                    return;
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("REST error", error.getMessage());
-                textView.setText("Error fetching data.");
+            pets.setText("");
+            for (String row : data) {
+                String currentText = pets.getText().toString();
+                pets.setText(currentText + "\n\n" + row);
             }
-        });
+        }
+    };
 
-        requestQueue.add(request);
-    }
+    // Listener for Favorites API response
+    private final Response.Listener<JSONArray> favoritesResponseListener = new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            ArrayList<String> data = new ArrayList<>();
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject object = response.getJSONObject(i);
+                    String name = object.getString("name");
+                    String reason = object.getString("reason");
+
+                    data.add(name + " " + reason);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    favorites.setText("Error parsing data.");
+                    return;
+                }
+            }
+            favorites.setText("");
+            for (String row : data) {
+                String currentText = favorites.getText().toString();
+                favorites.setText(currentText + "\n\n" + row);
+            }
+        }
+    };
+
+    // Listener for Adoption Requests API response
+    private final Response.Listener<JSONArray> adoptionRequestsResponseListener = new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            ArrayList<String> data = new ArrayList<>();
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject object = response.getJSONObject(i);
+                    String adopterName = object.getString("adopterName");
+                    String petName = object.getString("petName");
+                    String status = object.getString("status");
+
+                    data.add(adopterName + " requested " + petName + " - " + status);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    adoptionRequests.setText("Error parsing data.");
+                    return;
+                }
+            }
+            adoptionRequests.setText("");
+            for (String row : data) {
+                String currentText = adoptionRequests.getText().toString();
+                adoptionRequests.setText(currentText + "\n\n" + row);
+            }
+        }
+    };
+
+    // Listener for Messages API response
+    private final Response.Listener<JSONArray> messagesResponseListener = new Response.Listener<JSONArray>() {
+        @Override
+        public void onResponse(JSONArray response) {
+            ArrayList<String> data = new ArrayList<>();
+            for (int i = 0; i < response.length(); i++) {
+                try {
+                    JSONObject object = response.getJSONObject(i);
+                    String sender = object.getString("sender");
+                    String content = object.getString("content");
+
+                    data.add(sender + ": " + content);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    messages.setText("Error parsing data.");
+                    return;
+                }
+            }
+            messages.setText("");
+            for (String row : data) {
+                String currentText = messages.getText().toString();
+                messages.setText(currentText + "\n\n" + row);
+            }
+        }
+    };
+
+    // Error listener for all requests
+    private final Response.ErrorListener errorListener = new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.d("REST error", error.getMessage());
+        }
+    };
 }
