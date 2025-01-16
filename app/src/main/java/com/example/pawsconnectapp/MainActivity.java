@@ -28,10 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private TextView pets, favorites, adoptionRequests, messages;
 
-    private String petsUrl = "http://localhost:5263/api/v1/PetsApi";
-    private String favoritesUrl = "http://localhost:5263/api/v1/FavoritesApi";
-    private String adoptionRequestsUrl = "http://localhost:5263/api/v1/AdoptionRequests";
-    private String messagesUrl = "http://localhost:5263/api/v1/MessagesApi";
+    private String petsUrl = "https://pawsconnect-agbphvdyf9bahzca.northeurope-01.azurewebsites.net/api/v1/PetsApi";
+    private String favoritesUrl = "https://pawsconnect-agbphvdyf9bahzca.northeurope-01.azurewebsites.net/api/v1/FavoritesApi";
+    private String adoptionRequestsUrl = "https://pawsconnect-agbphvdyf9bahzca.northeurope-01.azurewebsites.net/api/v1/AdoptionRequests";
+    private String messagesUrl = "https://pawsconnect-agbphvdyf9bahzca.northeurope-01.azurewebsites.net/api/v1/MessagesApi";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
